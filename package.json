@@ -1,0 +1,17 @@
+{
+  "name": "sql_library_manager-v1",
+  "version": "1.0.0",
+  "description": "TeamTreeHouse - Unit 8 project",
+  "main": "index.js",
+  "dependencies": {
+    "sequelize": "^5.9.0",
+    "sequelize-cli": "^5.5.0",
+    "sqlite3": "^4.0.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chiarini Fabio",
+  "license": "ISC"
+}
