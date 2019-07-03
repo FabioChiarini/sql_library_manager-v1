@@ -2,14 +2,16 @@
   "name": "sql_library_manager-v1",
   "version": "1.0.0",
   "description": "TeamTreeHouse - Unit 8 project",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
+    "express": "^4.17.1",
     "sequelize": "^5.9.0",
     "sequelize-cli": "^5.5.0",
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chiarini Fabio",
