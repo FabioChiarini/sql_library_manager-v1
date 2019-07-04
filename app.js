@@ -2,16 +2,20 @@ const express = require("express");
 
 const app = express();
 
+var Book = require("./models").Book;
+
 //set view engine to use pug for template
 app.set("view engine", "pug");
 app.use("/static", express.static("public"));
 
 app.get("/", (req, res) => {
-  res.send("<h1>HOME</h1>");
+  res.redirect("books");
 });
 
 app.get("/books", (req, res) => {
-  res.send("<h1>BOOKS</h1>");
+  Book.findAll().then(function(books) {
+    res.render("index", { books: books });
+  });
 });
 
 app.get("/books/new", (req, res) => {

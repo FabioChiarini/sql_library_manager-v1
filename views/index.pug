@@ -1,0 +1,18 @@
+extends layout.pug
+
+block content
+
+    body
+        h1 Books
+        p
+            a(class='button' href='new_book.html') Create New Book
+
+        table
+            thead
+                tr
+                    td Title
+
+            tbody
+                each book in books
+                    tr
+                        td= book.title
