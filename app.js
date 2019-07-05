@@ -2,30 +2,26 @@ const express = require("express");
 
 const app = express();
 
-var Book = require("./models").Book;
+const routes = require('./routes');
+const books = require('./routes/books');
 
 //set view engine to use pug for template
 app.set("view engine", "pug");
-app.use("/static", express.static("public"));
 
-app.get("/", (req, res) => {
-  res.redirect("books");
+
+app.use('/', routes);
+app.use('/books', books);
+
+
+// setup error handling for 404 error
+app.use((req, res, next) => {
+  const err = new Error('PAGE NOT FOUND!!');
+  err.status = 404;
+  next(err);
 });
 
-app.get("/books", (req, res) => {
-  Book.findAll().then(function(books) {
-    res.render("index", { books: books });
-  });
-});
-
-app.get("/books/new", (req, res) => {
-  res.send("<h1>NEW BOOK</h1>");
-});
-
-app.get("/books/:id", (req, res) => {
-  res.send("<h1>ABC</h1>");
-});
 
 app.listen(3000, () => {
   console.log("Running on localhost:3000");
 });
+
