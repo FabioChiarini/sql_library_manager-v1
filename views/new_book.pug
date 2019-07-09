@@ -1,6 +1,9 @@
 extends layout.pug
 
 block content
+    
+    head
+        title New Book
 
     body
         h1 New Book
@@ -13,7 +16,7 @@ block content
                 label(for='author') Author
                 input#author(type = "text", name = "author")
             p
-                label(for='genre') Author
+                label(for='genre') Genre
                 input#genre(type = "text", name = "genre")
             p
                 label(for='year') Year
