@@ -25,7 +25,6 @@ router.get("/:id/edit", (req, res) => {
 });
 
 router.post("/:id/edit", (req, res, next) => {
-
   Book.findByPk(req.params.id)
     .then(book => {
       return book.update(req.body);
@@ -34,6 +33,23 @@ router.post("/:id/edit", (req, res, next) => {
       res.redirect("/");
     });
 });
+
+
+router.get("/:id/delete", (req, res, next) => {
+  Book.findByPk(req.params.id).then(book => {
+    res.render("book_details", { book: book });
+  });
+})
+
+
+
+router.post("/:id/delete", (req, res, next) => {
+  Book.findByPk(req.params.id).then(book => {
+    return book.destroy();
+  }).then(()=> {
+    res.redirect("/");
+  });
+})
 
 
 module.exports = router;
