@@ -12,7 +12,7 @@ router.get("/new", (req, res, next) => {
   res.render("new_book", { book: Book.build() });
 });
 
-router.post("/new", (req, res, next) => {
+router.post("/", (req, res, next) => {
   Book.create(req.body).then(function(book) {
     res.redirect("/:" + book.id);
   });
