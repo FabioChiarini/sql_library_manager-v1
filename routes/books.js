@@ -13,16 +13,25 @@ router.get("/new", (req, res, next) => {
 });
 
 router.post("/new", (req, res, next) => {
-  console.log(req.body);
   Book.create(req.body).then(function(book) {
-    res.redirect("/books/" + book.id);
+    res.redirect("/books/" + book.id + "/edit");
   });
 });
 
-router.get("/:id", (req, res) => {
-  Book.findByPk(req.params.id).then(books => {
-    res.render("book_details", { books: books });
+router.get("/:id/edit", (req, res) => {
+  Book.findByPk(req.params.id).then(book => {
+    res.render("book_details", { book: book });
   });
+});
+
+router.put("/:id", (req, res, next) => {
+  Book.findByPk(req.params.id)
+    .then(book => {
+      return book.update(req.body);
+    })
+    .then(book => {
+      res.redirect("book_details", { book: book });
+    });
 });
 
 /*
