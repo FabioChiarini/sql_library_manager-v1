@@ -34,6 +34,20 @@ router.post("/:id/edit", (req, res, next) => {
     })
     .then(book => {
       res.redirect("/");
+    }).catch( err => {
+      if(err.name === "SequelizeValidationError") {
+        var book = Book.build(req.body);
+        book.id = req.params.id;
+
+        res.render("/:id/edit", {
+          book: book,
+          errors: err.errors
+        });
+      } else {
+        throw err;
+      }
+    }).catch(err => {
+      res.send(500);
     });
 });
 
