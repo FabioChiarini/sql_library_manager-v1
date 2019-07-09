@@ -24,25 +24,16 @@ router.get("/:id/edit", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res, next) => {
+router.post("/:id/edit", (req, res, next) => {
+
   Book.findByPk(req.params.id)
     .then(book => {
       return book.update(req.body);
     })
     .then(book => {
-      res.redirect("book_details", { book: book });
+      res.redirect("/");
     });
 });
 
-/*
-router.put("/:id", function(req, res, next) {
-  var book = find(req.params.id);
-  book.title = req.body.title;
-  book.author = req.body.author;
-  book.genre = req.body.genre;
-  book.year = req.body.year;
-
-  res.redirect("/books/" + book.id);
-});*/
 
 module.exports = router;
