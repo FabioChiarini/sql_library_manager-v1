@@ -1,0 +1,25 @@
+extends layout.pug
+
+block content
+
+    body
+        h1 New Book
+        
+        form
+            p
+                label(for='title') Title
+                input#title(type = "text", name = "title")
+            p
+                label(for='author') Author
+                input#author(type = "text", name = "author")
+            p
+                label(for='genre') Author
+                input#genre(type = "text", name = "genre")
+            p
+                label(for='year') Year
+                input#year(type = "text", name = "year")
+            p
+                input(type = "submit", value = "Create New Book")
+            p
+                a(class='button' href='/books') Cancel
+

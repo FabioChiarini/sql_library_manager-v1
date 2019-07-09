@@ -5,6 +5,7 @@ const app = express();
 const routes = require("./routes/index");
 const books = require("./routes/books");
 
+//set static and views paths
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
