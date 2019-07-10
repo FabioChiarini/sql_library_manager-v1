@@ -17,6 +17,20 @@ router.get("/new", (req, res, next) => {
 router.post("/new", (req, res, next) => {
   Book.create(req.body).then(function(book) {
     res.redirect("/books/" + book.id + "/edit");
+  }).catch( err => {
+    if(err.name === "SequelizeValidationError") {
+      var book = Book.build(req.body);
+      book.id = req.params.id;
+
+      res.render("new_book", {
+        book: book,
+        errors: err.errors
+      });
+    } else {
+      throw err;
+    }
+  }).catch(err => {
+    res.sendStatus(500);
   });
 });
 
@@ -47,7 +61,7 @@ router.post("/:id/edit", (req, res, next) => {
         throw err;
       }
     }).catch(err => {
-      res.send(500);
+      res.sendStatus(500);
     });
 });
 
