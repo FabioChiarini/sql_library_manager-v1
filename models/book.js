@@ -15,14 +15,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         validate: {
           notEmpty: {
-            msg: "TITLE IS REQUIRED"
+            msg: "AUTHOR IS REQUIRED"
           }
         },
       },
       genre: DataTypes.STRING,
-      year: DataTypes.INTEGER
+      year: {
+        type: DataTypes.INTEGER,
+        validate: {
+          isInt: {
+            msg: "YEAR SHOULD BE AN INTEGER"
+          }
+        },
+      }
     },
-    {}
   );
   Book.associate = function(models) {
     // associations can be defined here

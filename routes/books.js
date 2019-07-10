@@ -32,14 +32,14 @@ router.post("/:id/edit", (req, res, next) => {
     .then(book => {
       return book.update(req.body);
     })
-    .then(book => {
+    .then(() => {
       res.redirect("/");
     }).catch( err => {
       if(err.name === "SequelizeValidationError") {
         var book = Book.build(req.body);
         book.id = req.params.id;
 
-        res.render("/:id/edit", {
+        res.render("book_details", {
           book: book,
           errors: err.errors
         });
