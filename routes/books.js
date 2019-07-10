@@ -35,10 +35,16 @@ router.post("/new", (req, res, next) => {
 });
 
 /* route to edit exiting books */
-router.get("/:id/edit", (req, res) => {
+router.get("/:id/edit", (req, res, next) => {
   Book.findByPk(req.params.id).then(book => {
-    res.render("book_details", { book: book });
-  });
+    if (book) {
+      res.render("book_details", { book: book });
+    } else {
+      next()
+    } 
+  }).catch(err => {
+    res.sendStatus(500);    
+  })
 });
 
 router.post("/:id/edit", (req, res, next) => {
@@ -75,9 +81,16 @@ router.get("/:id/delete", (req, res, next) => {
 
 router.post("/:id/delete", (req, res, next) => {
   Book.findByPk(req.params.id).then(book => {
-    return book.destroy();
+    if (book) {
+      return book.destroy();
+    }
+    else {
+      res.sendStatus(404)
+    }
   }).then(()=> {
     res.redirect("/");
+  }).catch(err => {
+    res.sendStatus(500);
   });
 })
 

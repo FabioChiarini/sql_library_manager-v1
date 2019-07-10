@@ -24,6 +24,7 @@ app.use((req, res, next) => {
   const err = new Error("PAGE NOT FOUND!!");
   err.status = 404;
   next(err);
+  res.render("page_not_found");
 });
 
 app.listen(3000, () => {
