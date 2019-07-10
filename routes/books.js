@@ -4,7 +4,7 @@ var Book = require("../models").Book;
 
 /* "home" route, where al books are displayed */
 router.get("/", (req, res) => {
-  Book.findAll().then(function(books) {
+  Book.findAll({order: [["createdAt", "DESC"]]}).then(function(books) {
     res.render("index", { books: books });
   });
 });
