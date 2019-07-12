@@ -41,12 +41,15 @@ router.post("/new", (req, res, next) => {
 router.get("/:id/edit", (req, res, next) => {
   Book.findByPk(req.params.id)
     .then(book => {
-      res.render("book_details", { book: book });
+      if (book) {
+        res.render("book_details", { book: book });
+      } else {
+        const err = new Error();
+        next(err);
+      }
     })
     .catch(err => {
-      const err = new Error("SERVER ERROR");
-      err.status = 500;
-      next(err);
+      err.sendStatus(500);
     });
 });
 
@@ -68,13 +71,9 @@ router.post("/:id/edit", (req, res, next) => {
           errors: err.errors
         });
       } else {
-        throw err;
+        console.log("UNEXPECTED ERROR!!  " + err.status);
+        res.render("error");
       }
-    })
-    .catch(err => {
-      const err = new Error("SERVER ERROR");
-      err.status = 500;
-      next(err);
     });
 });
 

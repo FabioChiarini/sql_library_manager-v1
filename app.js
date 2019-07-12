@@ -23,14 +23,25 @@ app.use("/books", books);
 app.use((req, res, next) => {
   const error = new Error("PAGE NOT FOUND!!");
   error.status = 404;
-  console.log("UNEXPECTED ERROR!!  " + error.status);
-  res.render("page_not_found");
+  next(err);
 });
 
 // setup error handling for general errors
+/*
 app.use((err, req, res, next) => {
   console.log("UNEXPECTED ERROR!!  " + err.status);
   res.render("error");
+});*/
+
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  if (err.status === 404) {
+    console.log("404 - PAGE NOT FOUND!");
+    res.render("page_not_found");
+  } else {
+    console.log("500 - INTERNAL SERVER ERROR");
+    res.render("error");
+  }
 });
 
 app.listen(3000, () => {
