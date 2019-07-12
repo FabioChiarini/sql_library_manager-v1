@@ -21,10 +21,16 @@ app.use("/books", books);
 
 // setup error handling for 404 error
 app.use((req, res, next) => {
-  const err = new Error("PAGE NOT FOUND!!");
-  err.status = 404;
-  next(err);
+  const error = new Error("PAGE NOT FOUND!!");
+  error.status = 404;
+  console.log("UNEXPECTED ERROR!!  " + error.status);
   res.render("page_not_found");
+});
+
+// setup error handling for general errors
+app.use((err, req, res, next) => {
+  console.log("UNEXPECTED ERROR!!  " + err.status);
+  res.render("error");
 });
 
 app.listen(3000, () => {

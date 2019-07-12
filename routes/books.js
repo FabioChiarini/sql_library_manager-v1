@@ -4,7 +4,7 @@ var Book = require("../models").Book;
 
 /* "home" route, where al books are displayed */
 router.get("/", (req, res) => {
-  Book.findAll({order: [["createdAt", "DESC"]]}).then(function(books) {
+  Book.findAll({ order: [["createdAt", "DESC"]] }).then(function(books) {
     res.render("index", { books: books });
   });
 });
@@ -15,36 +15,39 @@ router.get("/new", (req, res, next) => {
 });
 
 router.post("/new", (req, res, next) => {
-  Book.create(req.body).then(function(book) {
-    res.redirect("/books/" + book.id + "/edit");
-  }).catch( err => {
-    if(err.name === "SequelizeValidationError") {
-      var book = Book.build(req.body);
-      book.id = req.params.id;
+  Book.create(req.body)
+    .then(function(book) {
+      res.redirect("/books/" + book.id + "/edit");
+    })
+    .catch(err => {
+      if (err.name === "SequelizeValidationError") {
+        var book = Book.build(req.body);
+        book.id = req.params.id;
 
-      res.render("new_book", {
-        book: book,
-        errors: err.errors
-      });
-    } else {
-      throw err;
-    }
-  }).catch(err => {
-    res.sendStatus(500);
-  });
+        res.render("new_book", {
+          book: book,
+          errors: err.errors
+        });
+      } else {
+        throw err;
+      }
+    })
+    .catch(err => {
+      res.sendStatus(500);
+    });
 });
 
 /* route to edit exiting books */
 router.get("/:id/edit", (req, res, next) => {
-  Book.findByPk(req.params.id).then(book => {
-    if (book) {
+  Book.findByPk(req.params.id)
+    .then(book => {
       res.render("book_details", { book: book });
-    } else {
-      next()
-    } 
-  }).catch(err => {
-    res.sendStatus(500);    
-  })
+    })
+    .catch(err => {
+      const err = new Error("SERVER ERROR");
+      err.status = 500;
+      next(err);
+    });
 });
 
 router.post("/:id/edit", (req, res, next) => {
@@ -54,8 +57,9 @@ router.post("/:id/edit", (req, res, next) => {
     })
     .then(() => {
       res.redirect("/");
-    }).catch( err => {
-      if(err.name === "SequelizeValidationError") {
+    })
+    .catch(err => {
+      if (err.name === "SequelizeValidationError") {
         var book = Book.build(req.body);
         book.id = req.params.id;
 
@@ -66,33 +70,36 @@ router.post("/:id/edit", (req, res, next) => {
       } else {
         throw err;
       }
-    }).catch(err => {
-      res.sendStatus(500);
+    })
+    .catch(err => {
+      const err = new Error("SERVER ERROR");
+      err.status = 500;
+      next(err);
     });
 });
-
 
 /* route to delete existing books */
 router.get("/:id/delete", (req, res, next) => {
   Book.findByPk(req.params.id).then(book => {
     res.render("book_details", { book: book });
   });
-})
+});
 
 router.post("/:id/delete", (req, res, next) => {
-  Book.findByPk(req.params.id).then(book => {
-    if (book) {
-      return book.destroy();
-    }
-    else {
-      res.sendStatus(404)
-    }
-  }).then(()=> {
-    res.redirect("/");
-  }).catch(err => {
-    res.sendStatus(500);
-  });
-})
-
+  Book.findByPk(req.params.id)
+    .then(book => {
+      if (book) {
+        return book.destroy();
+      } else {
+        res.sendStatus(404);
+      }
+    })
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch(err => {
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;
