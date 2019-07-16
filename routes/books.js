@@ -9,9 +9,9 @@ router.get("/", (req, res) => {
 });
 
 
-//
+
 /* "home" route, where al books are displayed */
-router.get("/:page", (req, res) => {
+router.get("/:page", (req, res, next) => {
   let books_to_show = [];
   Book.findAndCountAll({
     raw: true,
@@ -31,6 +31,14 @@ router.get("/:page", (req, res) => {
       next(err);
     });
 });
+
+
+router.get("/search/:searched_string", (req, res, next) => {
+  console.log("AAQAAAA!" + req.params.searched_string);
+  res.render("error");
+})
+
+
 
 /* route that let the user insert other books and then displays the inserted book */
 router.get("/book/new", (req, res, next) => {
