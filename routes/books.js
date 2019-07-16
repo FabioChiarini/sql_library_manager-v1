@@ -35,8 +35,15 @@ router.get("/:page", (req, res, next) => {
 
 router.get("/search/:searched_string", (req, res, next) => {
   console.log("AAQAAAA!" + req.params.searched_string);
-  res.render("error");
+  //res.render("error");
 })
+
+
+
+router.post("/search", (req, res, next) => {
+  res.redirect("/books/search/" + req.body.keyword)
+});
+
 
 
 

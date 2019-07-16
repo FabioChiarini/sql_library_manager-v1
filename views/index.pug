@@ -10,12 +10,12 @@ block content
 
         h2 Search a book 
 
-        div.searchBar
-            input(type="text")
-            |
-            |
-            |
-            a(type="button" href=`/books/search/${searched_string}`) Search
+        div.searchbar
+            form(action="/books/search/", method="post")
+                p
+                    label(for='keyword') KEYWORD:
+                    input#keyword(type = "text", name = "keyword", value = keyword)
+                    input(type = "submit", value = "SEARCH") 
         br
         table
             thead
