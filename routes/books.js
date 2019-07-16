@@ -4,8 +4,11 @@ var Book = require("../models").Book;
 
 /* "home" route, where al books are displayed */
 router.get("/", (req, res) => {
-  Book.findAll({ order: [["createdAt", "DESC"]] }).then(function(books) {
+  Book.findAll({ order: [["createdAt", "DESC"]], limit: 5, offset: 3 }).then(function(books) {
     res.render("index", { books: books });
+  }).catch(err => {
+    err.status = 500;
+    next(err);
   });
 });
 
@@ -33,7 +36,7 @@ router.post("/new", (req, res, next) => {
       }
     })
     .catch(err => {
-      res.sendStatus(500);
+      err.status = 500;
     });
 });
 
@@ -45,11 +48,13 @@ router.get("/:id/edit", (req, res, next) => {
         res.render("book_details", { book: book });
       } else {
         const err = new Error();
+        err.status = 500;
         next(err);
       }
     })
     .catch(err => {
-      err.sendStatus(500);
+      err.status = 500;
+      next(err);
     });
 });
 
@@ -71,8 +76,8 @@ router.post("/:id/edit", (req, res, next) => {
           errors: err.errors
         });
       } else {
-        console.log("UNEXPECTED ERROR!!  " + err.status);
-        res.render("error");
+        err.status = 500;
+        next(err);
       }
     });
 });
@@ -90,14 +95,16 @@ router.post("/:id/delete", (req, res, next) => {
       if (book) {
         return book.destroy();
       } else {
-        res.sendStatus(404);
+        err.status = 500;
+        next(err);
       }
     })
     .then(() => {
       res.redirect("/");
     })
     .catch(err => {
-      res.sendStatus(500);
+      err.status = 500;
+      next(err);
     });
 });
 
