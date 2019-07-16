@@ -26,9 +26,10 @@ block content
                         td= book.year
         
         br
-        br
         
         div.pagination
-                    a(class='button' href='/books/1') 1
-                    a(class='button' href='/books/2') 2
-                    a(class='button' href='/books/3') 3
+            - var i = 1;
+            while (i < (pages+1))
+                a(class='button' href=`/books/${i}`)= i
+                - i++
+

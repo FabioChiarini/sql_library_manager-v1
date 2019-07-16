@@ -8,15 +8,22 @@ router.get("/", (req, res) => {
   res.redirect("books/1");
 });
 
+
+//order: [["createdAt", "DESC"]],
 /* "home" route, where al books are displayed */
 router.get("/:page", (req, res) => {
-  Book.findAll({
-    order: [["createdAt", "DESC"]],
+  let books_to_show = [];
+  Book.findAndCountAll({
+    raw: true,
     limit: books_per_page,
-    offset: 3
+    offset: (books_per_page * (req.params.page - 1))
   })
     .then(function(books) {
-      res.render("index", { books: books });
+      let number_of_pages = Math.ceil(books.count/books_per_page);
+      for(book in books.rows) {
+        books_to_show.push(books.rows[book]);
+      }
+      res.render("index", { books: books_to_show , pages: number_of_pages});
     })
     .catch(err => {
       err.status = 500;
