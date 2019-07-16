@@ -2,9 +2,16 @@ const express = require("express");
 const router = express.Router();
 var Book = require("../models").Book;
 
-/* "home" route, where al books are displayed */
+let books_per_page = 5;
+
 router.get("/", (req, res) => {
-  Book.findAll({ order: [["createdAt", "DESC"]], limit: 5, offset: 3 }).then(function(books) {
+  res.redirect("books/1");
+});
+
+
+/* "home" route, where al books are displayed */
+router.get("/:page", (req, res) => {
+  Book.findAll({ order: [["createdAt", "DESC"]], limit: books_per_page, offset: 3 }).then(function(books) {
     res.render("index", { books: books });
   }).catch(err => {
     err.status = 500;
