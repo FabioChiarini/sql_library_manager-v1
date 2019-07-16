@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 var Book = require("../models").Book;
+const Op = require('sequelize').Op;
 
 let books_per_page = 5;
 
@@ -34,9 +35,56 @@ router.get("/:page", (req, res, next) => {
 
 
 router.get("/search/:searched_string", (req, res, next) => {
-  console.log("AAQAAAA!" + req.params.searched_string);
-  //res.render("error");
-})
+  let keyword = req.params.searched_string; 
+  console.log("AAQAAAA!    " + keyword);
+  //let books_to_show = [];
+  Book.findAll({
+    raw: true,
+    where: {
+
+      [Op.or] : [{
+        title: {
+          [Op.like]: `%${keyword}%`
+        }
+      },
+      {
+        author: {
+          [Op.like]: `%${keyword}%`
+        }
+      },
+      {
+        genre: {
+          [Op.like]: `%${keyword}%`
+        }
+      },
+      {
+        year: {
+          [Op.like]: `%${keyword}%`
+        }
+      }
+      ]
+
+    }
+    //limit: books_per_page,
+    //order: [["createdAt", "DESC"]]
+    //offset: (books_per_page * (req.params.page - 1))
+  })
+    .then(function(books) {
+      res.render("search_results", {books: books});
+      /*
+      let number_of_pages = Math.ceil(books.count/books_per_page);
+      for(book in books.rows) {
+        books_to_show.push(books.rows[book]);
+      }
+      res.render("index", { books: books_to_show , pages: number_of_pages});
+      */
+    })
+    .catch(err => {
+      err.status = 500;
+      next(err);
+    });
+});
+
 
 
 

@@ -1,0 +1,26 @@
+extends layout.pug
+
+block content
+
+    body
+        h1 Search Results
+
+        br
+        table
+            thead
+                tr
+                    td Title
+                    td Author
+                    td Genre
+                    td Year
+
+
+            tbody
+                each book in books
+                    tr
+                        td
+                            a(href=`/books/${book.id}/edit`)= book.title
+                        td= book.author
+                        td= book.genre
+                        td= book.year
+    
