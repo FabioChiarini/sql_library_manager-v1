@@ -24,5 +24,11 @@ block content
                         td= book.genre
                         td= book.year
         br
+        div.pagination
+            - var i = 1;
+            while (i < (pages+1))
+                a(class='button' href=`/books/search/${keyword}/${i}`)= i
+                - i++
+        br
         p
             a(class='button' href='/books') HOME
