@@ -8,15 +8,20 @@ router.get("/", (req, res) => {
   res.redirect("books/1");
 });
 
-
 /* "home" route, where al books are displayed */
 router.get("/:page", (req, res) => {
-  Book.findAll({ order: [["createdAt", "DESC"]], limit: books_per_page, offset: 3 }).then(function(books) {
-    res.render("index", { books: books });
-  }).catch(err => {
-    err.status = 500;
-    next(err);
-  });
+  Book.findAll({
+    order: [["createdAt", "DESC"]],
+    limit: books_per_page,
+    offset: 3
+  })
+    .then(function(books) {
+      res.render("index", { books: books });
+    })
+    .catch(err => {
+      err.status = 500;
+      next(err);
+    });
 });
 
 /* route that let the user insert other books and then displays the inserted book */

@@ -5,7 +5,7 @@ block content
     body
         h1 Books
         p
-            a(class='button' href='books/new') Create New Book
+            a(class='button' href='/new') Create New Book
 
         table
             thead
@@ -24,3 +24,11 @@ block content
                         td= book.author
                         td= book.genre
                         td= book.year
+        
+        br
+        br
+        
+        div.pagination
+                    a(class='button' href='/books/1') 1
+                    a(class='button' href='/books/2') 2
+                    a(class='button' href='/books/3') 3
