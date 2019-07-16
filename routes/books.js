@@ -9,13 +9,14 @@ router.get("/", (req, res) => {
 });
 
 
-//order: [["createdAt", "DESC"]],
+//
 /* "home" route, where al books are displayed */
 router.get("/:page", (req, res) => {
   let books_to_show = [];
   Book.findAndCountAll({
     raw: true,
     limit: books_per_page,
+    order: [["createdAt", "DESC"]],
     offset: (books_per_page * (req.params.page - 1))
   })
     .then(function(books) {
@@ -32,11 +33,11 @@ router.get("/:page", (req, res) => {
 });
 
 /* route that let the user insert other books and then displays the inserted book */
-router.get("/new", (req, res, next) => {
+router.get("/book/new", (req, res, next) => {
   res.render("new_book", { book: Book.build() });
 });
 
-router.post("/new", (req, res, next) => {
+router.post("/book/new", (req, res, next) => {
   Book.create(req.body)
     .then(function(book) {
       res.redirect("/books/" + book.id + "/edit");
