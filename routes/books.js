@@ -5,11 +5,12 @@ const Op = require("sequelize").Op;
 
 let books_per_page = 5;
 
+// redirect users to first page of results
 router.get("/", (req, res) => {
   res.redirect("books/1");
 });
 
-/* "home" route, where al books are displayed */
+/* "home" route, where al books are displayed based on the page number*/
 router.get("/:page", (req, res, next) => {
   let books_to_show = [];
   Book.findAndCountAll({
@@ -19,11 +20,19 @@ router.get("/:page", (req, res, next) => {
     offset: books_per_page * (req.params.page - 1)
   })
     .then(function(books) {
+      // calculate number of pages and populate the respective array
       let number_of_pages = Math.ceil(books.count / books_per_page);
       for (book in books.rows) {
         books_to_show.push(books.rows[book]);
       }
-      res.render("index", { books: books_to_show, pages: number_of_pages });
+      // check if page requested is in the interval, otherwise throw 404 err
+      if (req.params.page <= number_of_pages) {
+        res.render("index", { books: books_to_show, pages: number_of_pages });
+      } else {
+        const err = new Error();
+        err.status = 404;
+        next(err);
+      }
     })
     .catch(err => {
       err.status = 500;
@@ -70,14 +79,21 @@ router.get("/search/:searched_string/:page", (req, res, next) => {
       for (book in books.rows) {
         books_to_show.push(books.rows[book]);
       }
-      console.log("books_to_show: " + books_to_show);
-      console.log("number_of_pages: " + number_of_pages);
-      console.log("keyword: " + keyword);
-      res.render("search_results", {
-        books: books_to_show,
-        pages: number_of_pages,
-        keyword: keyword
-      });
+      if (books_to_show.length > 0) {
+        if (req.params.page <= number_of_pages) {
+          res.render("search_results", {
+            books: books_to_show,
+            pages: number_of_pages,
+            keyword: keyword
+          });
+        } else {
+          const err = new Error();
+          err.status = 404;
+          next(err);
+        }
+      } else {
+        res.render("no_results");
+      }
     })
     .catch(err => {
       err.status = 500;
